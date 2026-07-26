@@ -17,6 +17,14 @@ const productSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    image: {
+        type: String,
+        required: true,
+    },
+    stock: {
+        type:"string",
+        required: true
+    },
     
     timestamps : true
 

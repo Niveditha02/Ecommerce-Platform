@@ -51,7 +51,7 @@ export default function ProductList(){
                         <td className="border border-gray-200 px-4 py-2">{products.Stock}</td>
                         <td className="border border-gray-200 px-4 py-2">{products.Actions}</td>
                         <td className="border border-gray-200 px-4 py-2">
-                            <Link to={`/admin/products/update/${products.id}`} className="text-base text-gray-700">
+                            <Link to={`/admin/products/edit/${products.id}`} className="text-base text-gray-700">
                                Edit
                             </Link>
                         </td>
