@@ -20,7 +20,19 @@ export const createProduct = async (req, res) => {
 // Get All Products
 export const getProduct = async (req, res) => {
   try {
-    const products = await Product.find().sort({ createdAt: -1 });
+    const {search, category} = req.query;
+    let filter = {};
+    if(search){
+      // RegExp ($regex) is used to perform partial and flexible string matching in MongoDB
+      filter.title = {$regex:search, $options:'i'};//case-sensitive
+      
+    }
+
+    if(category){
+      filter.category = {$regex:category, $options:'i'};
+    }
+
+    const products = await Product.find(filter).sort({ createdAt: -1 });
 
     res.json(products);
   } catch (error) {
