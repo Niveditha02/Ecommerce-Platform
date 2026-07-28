@@ -1,68 +1,84 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router";
 import api from "../api/axios";
-import {Link} from "react-router-dom";
 
-export default function ProductList(){
-    const [products, setProducts] = useState([]);
+export default function ProductList() {
+  const [products, setProducts] = useState([]);
 
-    const loadProducts = async()=>{
-        const response = await api.get("/products");
-        setProducts(response.data);
+  const loadProducts = async () => {
+    try {
+      const response = await api.get("/products");
+      setProducts(response.data);
+    } catch (err) {
+      console.error("Error loading products:", err);
     }
+  };
 
-    const deleteProducts = async(id)=>{
-        try{
-            await api.delete(`/products/delete/${id}`);
-            alert("Product deleted successfully");
-            loadProducts();
-        }catch(err){
-        console.error("Error deleting product: ", err);
+  const deleteProduct = async (id) => {
+    try {
+      await api.delete(`/products/delete/${id}`);
+      alert("Product deleted successfully");
+      loadProducts();
+    } catch (err) {
+      console.error("Error deleting product:", err);
     }
-    }
+  };
 
-    useEffect(()=>{
-        loadProducts();
-    },[]);
+  useEffect(() => {
+    loadProducts();
+  }, []);
 
-    return(
-        <div className="max-w-4x1 mx-auto mt-10">
-            <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2x1 fonyt-bold">Product List</h2>
-                <Link to="/admin/products/add" className="text-blue-600 hover:text-blue-700 
-                transition-colors duration-200">
-                       Add New Product
-                </Link>
-            </div>
+  return (
+    <div className="max-w-5xl mx-auto mt-10">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold">Product List</h2>
 
-        <table className="w-full border-collapse border border-gray-300">
-            <thead>
-                <tr className="bg-gray-100">
-                    <th className="border border-gray-200 px-4 py-2">Title</th>
-                    <th className="border border-gray-200 px-4 py-2">Price</th>
-                    <th className="border border-gray-200 px-4 py-2">Stock</th>
-                    <th className="border border-gray-200 px-4 py-2">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {products.map((products)=>(
-                    <tr key={products.id} className = "text-center">
-                        <td className="border border-gray-200 px-4 py-2">{products.title}</td>
-                        <td className="border border-gray-200 px-4 py-2">{products.price}</td>
-                        <td className="border border-gray-200 px-4 py-2">{products.Stock}</td>
-                        <td className="border border-gray-200 px-4 py-2">{products.Actions}</td>
-                        <td className="border border-gray-200 px-4 py-2">
-                            <Link to={`/admin/products/edit/${products.id}`} className="text-base text-gray-700">
-                               Edit
-                            </Link>
-                        </td>
-                    <button onClick={()=>deleteProduct(products.id)}
-                        className="text-base text-gray-700">
-                        Delete
-                    </button>
-                    </tr> 
-                ))}
-            </tbody>
-        </table>
-        </div>
-    )
+        <Link
+          to="/admin/products/add"
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+        >
+          Add New Product
+        </Link>
+      </div>
+
+      <table className="w-full border border-gray-300 border-collapse">
+        <thead>
+          <tr className="bg-gray-100">
+            <th className="border px-4 py-2">Title</th>
+            <th className="border px-4 py-2">Price</th>
+            <th className="border px-4 py-2">Stock</th>
+            <th className="border px-4 py-2">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {products.map((product) => (
+            <tr key={product._id} className="text-center">
+              <td className="border px-4 py-2">{product.title}</td>
+              <td className="border px-4 py-2">₹{product.price}</td>
+              <td className="border px-4 py-2">{product.stock}</td>
+
+              <td className="border px-4 py-2">
+                <div className="flex justify-center gap-3">
+                  <Link
+                    to={`/admin/products/edit/${product._id}`}
+                    className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                  >
+                    Edit
+                  </Link>
+
+                  <button
+                    onClick={() => deleteProduct(product._id)}
+                    className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
 }
