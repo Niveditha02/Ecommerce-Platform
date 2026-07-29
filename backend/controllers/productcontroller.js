@@ -25,7 +25,6 @@ export const getProduct = async (req, res) => {
     if(search){
       // RegExp ($regex) is used to perform partial and flexible string matching in MongoDB
       filter.title = {$regex:search, $options:'i'};//case-sensitive
-      
     }
 
     if(category){

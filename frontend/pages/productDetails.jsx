@@ -1,7 +1,4 @@
-export default function ProductDetails(){
-    return(
-        <div>
-            <h1>Product Details</h1>
-        </div>
-    );
-}
+import {useState, useEffect} from "react";
+import api from "../api/axios";
+import {useParams} from "react-router";
+
